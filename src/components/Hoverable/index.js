@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import React, {Component} from 'react';
+import {AppState} from 'react-native';
 import {propTypes, defaultProps} from './hoverablePropTypes';
 
 /**
@@ -15,6 +16,7 @@ class Hoverable extends Component {
         };
 
         this.wrapperView = null;
+        this.dismissHoverWhenBackgrounded = this.dismissHoverWhenBackgrounded.bind(this);
     }
 
     componentDidMount() {
@@ -30,6 +32,8 @@ class Hoverable extends Component {
 
         // Remember Touchend fires before `mouse` events so we have to use alternative.
         document.addEventListener('touchmove', this.enableHover);
+        
+        this.appStateSubscription = AppState.addEventListener('change', this.dismissHoverWhenBackgrounded);
     }
 
     componentDidUpdate(prevProps) {
@@ -45,6 +49,7 @@ class Hoverable extends Component {
     componentWillUnmount() {
         document.removeEventListener('touchstart', this.disableHover);
         document.removeEventListener('touchmove', this.enableHover);
+        this.appStateSubscription.remove();
     }
 
     /**
@@ -65,6 +70,13 @@ class Hoverable extends Component {
         if (!isHovered) {
             this.hoverDisabled = false;
         }
+    }
+    dismissHoverWhenBackgrounded(nextAppState) {
+        if (!nextAppState.match(/inactive|background/)) {
+            return;
+        }
+
+        setIsHovered(false);
     }
 
     render() {
