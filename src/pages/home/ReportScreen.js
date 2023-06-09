@@ -269,6 +269,7 @@ class ReportScreen extends React.Component {
                                 personalDetails={this.props.personalDetails}
                                 isSingleTransactionView={isSingleTransactionView}
                                 parentReportAction={parentReportAction}
+                                isFixedPart={true}
                             />
                         ) : (
                             <HeaderView
@@ -317,7 +318,8 @@ class ReportScreen extends React.Component {
                                 report={this.props.report}
                                 isComposerFullSize={this.props.isComposerFullSize}
                                 parentViewHeight={this.state.skeletonViewContainerHeight}
-                                policy={policy}
+                                policies={this.props.policies}
+                                personalDetails={this.props.personalDetails}
                             />
                         )}
 

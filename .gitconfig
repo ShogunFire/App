@@ -1,0 +1,8 @@
+[commit]
+    gpgsign = true
+[user]
+    email = pmiche04@gmail.com
+    name = ShogunFire
+    signingkey = F7ABEB34B1615851BCCD428E7140762CEFD584FE
+[gpg]
+    program = gpg

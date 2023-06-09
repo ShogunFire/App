@@ -24,6 +24,8 @@ import withNavigationFocus from '../../../components/withNavigationFocus';
 import * as ReactionList from './ReactionList/ReactionList';
 import PopoverReactionList from './ReactionList/PopoverReactionList';
 import getIsReportFullyVisible from '../../../libs/getIsReportFullyVisible';
+import personalDetailsPropType from '../../personalDetailsPropType';
+import MoneyRequestHeader from '../../../components/MoneyRequestHeader';
 
 const propTypes = {
     /** The report currently being looked at */
@@ -38,14 +40,18 @@ const propTypes = {
     /** Information about the network */
     network: networkPropTypes.isRequired,
 
-    /** The policy object for the current route */
-    policy: PropTypes.shape({
-        /** The name of the policy */
-        name: PropTypes.string,
+    /** The policies which the user has access to */
+    policies: PropTypes.objectOf(
+        PropTypes.shape({
+            /** The policy name */
+            name: PropTypes.string,
 
-        /** The URL for the policy avatar */
-        avatar: PropTypes.string,
-    }),
+            /** The type of the policy */
+            type: PropTypes.string,
+        }),
+    ),
+        /** All of the personal details for everyone */
+    personalDetails: PropTypes.objectOf(personalDetailsPropType),
 
     ...windowDimensionsPropTypes,
     ...withLocalizePropTypes,
@@ -53,7 +59,7 @@ const propTypes = {
 
 const defaultProps = {
     reportActions: [],
-    policy: null,
+    policies: null,
 };
 
 class ReportActionsView extends React.Component {
@@ -172,6 +178,8 @@ class ReportActionsView extends React.Component {
             return true;
         }
 
+
+/*
         if (lodashGet(this.props, 'policy.avatar') !== lodashGet(nextProps, 'policy.avatar')) {
             return true;
         }
@@ -179,7 +187,7 @@ class ReportActionsView extends React.Component {
         if (lodashGet(this.props, 'policy.name') !== lodashGet(nextProps, 'policy.name')) {
             return true;
         }
-
+*/
         return !_.isEqual(lodashGet(this.props.report, 'icons', []), lodashGet(nextProps.report, 'icons', []));
     }
 
@@ -337,8 +345,20 @@ class ReportActionsView extends React.Component {
         if (!_.size(this.props.reportActions)) {
             return null;
         }
+         const parentReportAction = ReportActionsUtils.getParentReportAction(this.props.report);
+        const isSingleTransactionView = ReportActionsUtils.isTransactionThread(parentReportAction);
         return (
             <>
+                {ReportUtils.isMoneyRequestReport(this.props.report) || isSingleTransactionView && (
+                    <MoneyRequestHeader
+                        report={this.props.report}
+                        policies={this.props.policies}
+                        personalDetails={this.props.personalDetails}
+                        isSingleTransactionView={isSingleTransactionView}
+                        parentReportAction={parentReportAction}
+                        isFixedPart={false}
+                    />
+                )}
                 <FloatingMessageCounter
                     isActive={this.state.isFloatingMessageCounterVisible && !_.isEmpty(this.state.newMarkerReportActionID)}
                     onClick={this.scrollToBottomAndMarkReportAsRead}
