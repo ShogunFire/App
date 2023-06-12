@@ -128,14 +128,18 @@ function NewContactMethodPage(props) {
                 <Text style={[styles.mb5]}>{props.translate('common.pleaseEnterEmailOrPhoneNumber')}</Text>
                 <View style={[styles.mb6]}>
                     <TextInput
+                        autoFocus
                         label={`${props.translate('common.email')}/${props.translate('common.phoneNumber')}`}
-                        keyboardType={CONST.KEYBOARD_TYPE.EMAIL_ADDRESS}
+                        keyboardType={CONST.KEYBOARD_TYPE.NUMBER_PAD}
                         ref={(el) => (loginInputRef.current = el)}
                         inputID="phoneOrEmail"
                         autoCapitalize="none"
                         returnKeyType={Permissions.canUsePasswordlessLogins(props.betas) ? 'done' : 'next'}
-                        autoFocus
-                        shouldDelayFocus={true}
+                        
+                        shouldDelayFocus={false}
+                        disabled={false}
+                        shouldSaveDraft
+                        shouldUseDefaultValue={false}
                     />
                 </View>
                 {!Permissions.canUsePasswordlessLogins(props.betas) && (
