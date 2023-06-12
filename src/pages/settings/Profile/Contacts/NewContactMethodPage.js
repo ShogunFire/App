@@ -140,6 +140,7 @@ function NewContactMethodPage(props) {
                         inputID="phoneOrEmail"
                         autoCapitalize="none"
                         returnKeyType={Permissions.canUsePasswordlessLogins(props.betas) ? 'done' : 'next'}
+                        autoFocus
                     />
                 </View>
                 {!Permissions.canUsePasswordlessLogins(props.betas) && (
