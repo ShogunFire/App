@@ -135,6 +135,7 @@ function NewContactMethodPage(props) {
                         autoCapitalize="none"
                         returnKeyType={Permissions.canUsePasswordlessLogins(props.betas) ? 'done' : 'next'}
                         autoFocus
+                        shouldDelayFocus={true}
                     />
                 </View>
                 {!Permissions.canUsePasswordlessLogins(props.betas) && (
