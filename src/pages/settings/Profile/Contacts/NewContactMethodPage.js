@@ -110,13 +110,7 @@ function NewContactMethodPage(props) {
 
     return (
         <ScreenWrapper
-            onEntryTransitionEnd={() => {
-                if (!loginInputRef.current) {
-                    return;
-                }
-
-                loginInputRef.current.focus();
-            }}
+            
             includeSafeAreaPaddingBottom={false}
         >
             <HeaderWithBackButton
