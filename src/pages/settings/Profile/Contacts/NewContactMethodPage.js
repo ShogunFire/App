@@ -116,6 +116,7 @@ function NewContactMethodPage(props) {
                 }
 
                 loginInputRef.current.focus();
+                loginInputRef.current.setSelectionRange(0, 0);
             }}
             includeSafeAreaPaddingBottom={false}
         >
