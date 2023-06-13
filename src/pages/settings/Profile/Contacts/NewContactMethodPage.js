@@ -110,7 +110,13 @@ function NewContactMethodPage(props) {
 
     return (
         <ScreenWrapper
-            
+            onEntryTransitionEnd={() => {
+                if (!loginInputRef.current) {
+                    return;
+                }
+
+                loginInputRef.current.focus();
+            }}
             includeSafeAreaPaddingBottom={false}
         >
             <HeaderWithBackButton
@@ -128,17 +134,12 @@ function NewContactMethodPage(props) {
                 <Text style={[styles.mb5]}>{props.translate('common.pleaseEnterEmailOrPhoneNumber')}</Text>
                 <View style={[styles.mb6]}>
                     <TextInput
-                        autoFocus
-                        label="Whyyyy"
-                        keyboardType={CONST.KEYBOARD_TYPE.NUMBER_PAD}
+                        label={`${props.translate('common.email')}/${props.translate('common.phoneNumber')}`}
+                        keyboardType={CONST.KEYBOARD_TYPE.EMAIL_ADDRESS}
                         ref={(el) => (loginInputRef.current = el)}
                         inputID="phoneOrEmail"
+                        autoCapitalize="none"
                         returnKeyType={Permissions.canUsePasswordlessLogins(props.betas) ? 'done' : 'next'}
-                        
-                        shouldDelayFocus={false}
-                        disabled={false}
-                        shouldSaveDraft 
-                        shouldUseDefaultValue={false}
                     />
                 </View>
                 {!Permissions.canUsePasswordlessLogins(props.betas) && (
