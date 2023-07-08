@@ -50,7 +50,6 @@ class EmojiPickerMenu extends Component {
         // Get the header emojis along with the code, index and icon.
         // index is the actual header index starting at the first emoji and counting each one
         this.headerEmojis = EmojiUtils.getHeaderEmojis(this.emojis);
-
         // This is the indices of each header's Row
         // The positions are static, and are calculated as index/numColumns (8 in our case)
         // This is because each row of 8 emojis counts as one index to the flatlist
@@ -106,9 +105,12 @@ class EmojiPickerMenu extends Component {
      * @param {Object} emojiObject
      */
     addToFrequentAndSelectEmoji(emoji, emojiObject) {
-        const frequentEmojiList = EmojiUtils.getFrequentlyUsedEmojis(emojiObject);
-        User.updateFrequentlyUsedEmojis(frequentEmojiList);
-        this.props.onEmojiSelected(emoji, emojiObject);
+        if(!this.state.alreadySelected){
+            this.setState({alreadySelected: true});
+            const frequentEmojiList = EmojiUtils.getFrequentlyUsedEmojis(emojiObject);
+            User.updateFrequentlyUsedEmojis(frequentEmojiList);
+            this.props.onEmojiSelected(emoji, emojiObject);
+        }
     }
 
     /**
