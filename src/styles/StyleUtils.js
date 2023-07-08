@@ -743,7 +743,8 @@ function extractValuesFromRGB(color) {
  */
 function getThemeBackgroundColor(bgColor = themeColors.appBG) {
     const backdropOpacity = variables.modalFullscreenBackdropOpacity;
-
+    if (!bgColor)
+        bgColor = themeColors.appBG;
     const [backgroundRed, backgroundGreen, backgroundBlue] = extractValuesFromRGB(bgColor) || hexadecimalToRGBArray(bgColor);
     const [backdropRed, backdropGreen, backdropBlue] = hexadecimalToRGBArray(themeColors.modalBackdrop);
     const normalizedBackdropRGB = convertRGBToUnitValues(backdropRed, backdropGreen, backdropBlue);
