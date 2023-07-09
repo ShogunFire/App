@@ -291,7 +291,7 @@ class ReportActionCompose extends React.Component {
     }
 
     onSelectionChange(e) {
-        LayoutAnimation.configureNext(LayoutAnimation.create(50, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity));
+        //LayoutAnimation.configureNext(LayoutAnimation.create(50, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity));
         this.setState({selection: e.nativeEvent.selection});
         if (!this.state.value || e.nativeEvent.selection.end < 1) {
             this.resetSuggestions();
@@ -682,12 +682,13 @@ class ReportActionCompose extends React.Component {
      */
     addEmojiToTextBox(emoji) {
         this.updateComment(ComposerUtils.insertText(this.comment, this.state.selection, `${emoji} `));
-        this.setState((prevState) => ({
+        
+        /*this.setState((prevState) => ({
             selection: {
                 start: prevState.selection.start + emoji.length + CONST.SPACE_LENGTH,
                 end: prevState.selection.start + emoji.length + CONST.SPACE_LENGTH,
             },
-        }));
+        }));*/
     }
 
     /**
