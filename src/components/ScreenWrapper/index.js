@@ -100,15 +100,8 @@ class ScreenWrapper extends React.Component {
                             // eslint-disable-next-line react/jsx-props-no-spreading
                             {...(this.props.environment === CONST.ENVIRONMENT.DEV ? this.panResponder.panHandlers : {})}
                         >
-                            <KeyboardAvoidingView
-                                style={[styles.w100, styles.h100, {maxHeight}]}
-                                behavior={this.props.keyboardAvoidingViewBehavior}
-                                enabled={false}
-                            >
-                                <PickerAvoidingView
-                                    style={styles.flex1}
-                                    enabled={false}
-                                >
+                            
+                               
                                     <HeaderGap />
                                     {this.props.environment === CONST.ENVIRONMENT.DEV && <TestToolsModal />}
                                     {this.props.environment === CONST.ENVIRONMENT.DEV && <CustomDevMenu />}
@@ -123,8 +116,7 @@ class ScreenWrapper extends React.Component {
                                             : this.props.children
                                     }
                                     {this.props.isSmallScreenWidth && this.props.shouldShowOfflineIndicator && <OfflineIndicator />}
-                                </PickerAvoidingView>
-                            </KeyboardAvoidingView>
+                               
                         </View>
                     );
                 }}
