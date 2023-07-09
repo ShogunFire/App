@@ -36,7 +36,7 @@ const EmojiPicker = forwardRef((props, ref) => {
 
     useEffect(() => {
         if (isEmojiPickerVisible) {
-            Keyboard.dismiss();
+            //Keyboard.dismiss();
         }
 
         const emojiPopoverDimensionListener = Dimensions.addEventListener('change', () => {
