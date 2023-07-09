@@ -50,9 +50,9 @@ const defaultProps = {
     includePaddingTop: true,
     onEntryTransitionEnd: () => {},
     keyboardAvoidingViewBehavior: 'padding',
-    shouldEnableKeyboardAvoidingView: false,
+    shouldEnableKeyboardAvoidingView: true,
     shouldEnableMaxHeight: false,
-    shouldEnablePickerAvoiding: false,
+    shouldEnablePickerAvoiding: true,
     shouldShowOfflineIndicator: true,
 };
 
