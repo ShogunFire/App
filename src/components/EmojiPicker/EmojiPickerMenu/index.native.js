@@ -61,7 +61,7 @@ class EmojiPickerMenu extends Component {
         this.filterEmojis = _.debounce(this.filterEmojis.bind(this), 300);
         this.scrollToHeader = this.scrollToHeader.bind(this);
         this.getItemLayout = this.getItemLayout.bind(this);
-
+        this.addToFrequentAndSelectEmoji = _.debounce(this.addToFrequentAndSelectEmoji.bind(this), 1000, false);
         this.state = {
             filteredEmojis: this.emojis,
             headerIndices: this.headerRowIndices,
