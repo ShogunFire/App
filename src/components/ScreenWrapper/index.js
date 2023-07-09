@@ -103,11 +103,11 @@ class ScreenWrapper extends React.Component {
                             <KeyboardAvoidingView
                                 style={[styles.w100, styles.h100, {maxHeight}]}
                                 behavior={this.props.keyboardAvoidingViewBehavior}
-                                enabled={this.props.shouldEnableKeyboardAvoidingView}
+                                enabled={false}
                             >
                                 <PickerAvoidingView
                                     style={styles.flex1}
-                                    enabled={this.props.shouldEnablePickerAvoiding}
+                                    enabled={false}
                                 >
                                     <HeaderGap />
                                     {this.props.environment === CONST.ENVIRONMENT.DEV && <TestToolsModal />}
