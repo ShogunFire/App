@@ -139,7 +139,7 @@ export default {
         zipCodeExampleFormat: ({zipSampleFormat}) => (zipSampleFormat ? `p. ej. ${zipSampleFormat}` : ''),
         description: 'Descripción',
         with: 'con',
-        shareCode: 'Compartir código',
+        shareCode: 'Compartir ta mere',
         share: 'Compartir',
         per: 'por',
         mi: 'milla',
