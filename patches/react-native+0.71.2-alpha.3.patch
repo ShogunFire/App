@@ -39,9 +39,8 @@ index 2f48f9e..6418c76 100644
  
 +  // Avoid unnecessary renders if the KeyboardAvoidingView is disabled.
 +  _setBottom = (value: number) => {
-+    const {enabled = true} = this.props;
 +    this._bottom = value;
-+    if (enabled) {
++    if (this.props.enabled) {
 +      this.setState({bottom: value});
 +    }
 +  };
@@ -64,7 +63,7 @@ index 2f48f9e..6418c76 100644
 -    if (duration && easing) {
 +    this._setBottom(height);
 +
-+    if (enabled && duration && easing) {
++    if (this.props.enabled && duration && easing) {
        LayoutAnimation.configureNext({
          // We have to pass the duration equal to minimal accepted duration defined here: RCTLayoutAnimation.m
          duration: duration > 10 ? duration : 10,
@@ -76,8 +75,8 @@ index 2f48f9e..6418c76 100644
    };
  
 +  componentDidUpdate(_: Props, prevState: State): void {
-+    const {enabled = true} = this.props;
-+    if (enabled && this._bottom !== prevState.bottom) {
++    const {this.props.enabled = true} = this.props;
++    if (this.props.enabled && this._bottom !== prevState.bottom) {
 +      this.setState({bottom: this._bottom});
 +    }
 +  }
