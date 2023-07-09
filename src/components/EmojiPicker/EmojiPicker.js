@@ -121,7 +121,7 @@ const EmojiPicker = forwardRef((props, ref) => {
 
         hideEmojiPicker(false);
         if (_.isFunction(onEmojiSelected.current)) {
-            //onEmojiSelected.current(emoji, emojiObject);
+            onEmojiSelected.current(emoji, emojiObject);
         }
     };
 
