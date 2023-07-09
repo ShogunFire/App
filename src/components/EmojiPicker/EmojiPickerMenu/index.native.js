@@ -181,7 +181,7 @@ class EmojiPickerMenu extends Component {
 
         return (
             <EmojiPickerMenuItem
-                onPress={}
+                onPress={(emoji) => this.addToFrequentAndSelectEmoji(emoji, item)}
                 emoji={emojiCode}
             />
         );
