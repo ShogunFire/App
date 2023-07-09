@@ -75,7 +75,6 @@ index 2f48f9e..6418c76 100644
    };
  
 +  componentDidUpdate(_: Props, prevState: State): void {
-+    const {this.props.enabled = true} = this.props;
 +    if (this.props.enabled && this._bottom !== prevState.bottom) {
 +      this.setState({bottom: this._bottom});
 +    }
