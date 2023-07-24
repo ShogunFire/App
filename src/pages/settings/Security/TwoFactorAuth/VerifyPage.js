@@ -93,7 +93,7 @@ function VerifyPage(props) {
     }
 
     return (
-        <ScreenWrapper shouldShowOfflineIndicator={false}>
+        <ScreenWrapper shouldShowOfflineIndicator={false}  shouldEnableMaxHeight>
             <HeaderWithBackButton
                 title={props.translate('twoFactorAuth.headerTitle')}
                 stepCounter={{
