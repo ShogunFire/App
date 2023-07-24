@@ -93,7 +93,7 @@ function VerifyPage(props) {
     }
 
     return (
-        <ScreenWrapper shouldShowOfflineIndicator={false}  shouldEnableMaxHeight>
+        <ScreenWrapper shouldShowOfflineIndicator={false} >
             <HeaderWithBackButton
                 title={props.translate('twoFactorAuth.headerTitle')}
                 stepCounter={{
@@ -143,19 +143,7 @@ function VerifyPage(props) {
                         <TwoFactorAuthForm innerRef={formRef} />
                     </View>
                 </ScrollView>
-                <FixedFooter style={[styles.mtAuto, styles.pt2]}>
-                    <Button
-                        success
-                        text={props.translate('common.next')}
-                        isLoading={props.account.isLoading}
-                        onPress={() => {
-                            if (!formRef.current) {
-                                return;
-                            }
-                            formRef.current.validateAndSubmitForm();
-                        }}
-                    />
-                </FixedFooter>
+                
             </FullPageOfflineBlockingView>
         </ScreenWrapper>
     );
