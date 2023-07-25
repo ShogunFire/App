@@ -2,7 +2,7 @@ import _ from 'underscore';
 import lodashGet from 'lodash/get';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View} from 'react-native';
+import {View, InteractionManager} from 'react-native';
 import Button from '../Button';
 import FixedFooter from '../FixedFooter';
 import OptionsList from '../OptionsList';
@@ -115,13 +115,16 @@ class BaseOptionsSelector extends Component {
             return;
         }
 
-        if (this.props.shouldShowTextInput) {
+        /*if (this.props.shouldShowTextInput) {
             if (this.props.shouldDelayFocus) {
                 this.focusTimeout = setTimeout(() => this.textInput.focus(), CONST.ANIMATED_TRANSITION);
             } else {
-                this.textInput.focus();
+                
             }
-        }
+        }*/
+        InteractionManager.runAfterInteractions(() => {
+            this.textInput.focus();
+        }); 
     }
 
     componentDidUpdate(prevProps) {
