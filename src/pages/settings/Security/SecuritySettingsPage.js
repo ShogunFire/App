@@ -55,7 +55,7 @@ function SecuritySettingsPage(props) {
     ];
 
     return (
-        <ScreenWrapper>
+        <ScreenWrapper includeSafeAreaPaddingBottom={false}>
             <HeaderWithBackButton
                 title={props.translate('initialSettingsPage.security')}
                 onBackButtonPress={() => Navigation.goBack(ROUTES.SETTINGS)}
