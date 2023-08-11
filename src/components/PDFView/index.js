@@ -204,7 +204,7 @@ class PDFView extends Component {
      */
     renderPage({index, style}) {
         const pageWidth = this.calculatePageWidth();
-
+        const devicePixelRatio = 1;
         return (
             <View style={style}>
                 <Page
@@ -214,6 +214,7 @@ class PDFView extends Component {
                     // This needs to be empty to avoid multiple loading texts which show per page and look ugly
                     // See https://github.com/Expensify/App/issues/14358 for more details
                     loading=""
+                    devicePixelRatio={devicePixelRatio}
                 />
             </View>
         );
