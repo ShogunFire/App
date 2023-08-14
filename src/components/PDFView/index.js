@@ -204,7 +204,7 @@ class PDFView extends Component {
      */
     renderPage({index, style}) {
         const pageWidth = this.calculatePageWidth();
-        const devicePixelRatio = 0.9;
+        const devicePixelRatio = 1.5;
         return (
             <View style={style}>
                 <Page
