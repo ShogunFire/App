@@ -230,7 +230,7 @@ class PDFView extends Component {
         const pageHeight = this.calculatePageHeight(index);
         
         const nbPixels = pageWidth * pageHeight;
-        const ratio = (this.state.maxCanvasSize / nbPixels);
+        const ratio = Math.sqrt((this.state.maxCanvasSize / nbPixels));
         const devicePixelRatio = ratio > 3 ? 3 : ratio;
         Log.alert('Page height: '+ pageHeight + ', page width: '+ pageWidth);
         Log.alert('Ratio:'+ ratio);
