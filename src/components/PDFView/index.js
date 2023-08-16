@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {View} from 'react-native';
 import 'core-js/features/array/at';
 import {Document, Page, pdfjs} from 'react-pdf/dist/esm/entry.webpack';
-import pdfWorkerSource from 'pdfjs-dist/legacy/build/pdf.worker';
+
 import {VariableSizeList as List} from 'react-window';
 import FullScreenLoadingIndicator from '../FullscreenLoadingIndicator';
 import styles from '../../styles/styles';
@@ -17,6 +17,9 @@ import Text from '../Text';
 import compose from '../../libs/compose';
 import PressableWithoutFeedback from '../Pressable/PressableWithoutFeedback';
 import Log from '../../libs/Log';
+import canvasSize from 'canvas-size';
+
+
 
 /**
  * Each page has a default border. The app should take this size into account
@@ -32,6 +35,9 @@ const LARGE_SCREEN_SIDE_SPACING = 40;
 class PDFView extends Component {
     constructor(props) {
         super(props);
+        pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+        
         this.state = {
             numPages: null,
             pageViewports: [],
@@ -40,9 +46,12 @@ class PDFView extends Component {
             shouldRequestPassword: false,
             isPasswordInvalid: false,
             isKeyboardOpen: false,
+            maxCanvasSize: 0,
+            
         };
         this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
         this.initiatePasswordChallenge = this.initiatePasswordChallenge.bind(this);
+        this.setMaxCanvasSize = this.setMaxCanvasSize.bind(this);
         this.attemptPDFLoad = this.attemptPDFLoad.bind(this);
         this.toggleKeyboardOnSmallScreens = this.toggleKeyboardOnSmallScreens.bind(this);
         this.calculatePageHeight = this.calculatePageHeight.bind(this);
@@ -50,10 +59,24 @@ class PDFView extends Component {
         this.renderPage = this.renderPage.bind(this);
         this.setListAttributes = this.setListAttributes.bind(this);
 
-        const workerBlob = new Blob([pdfWorkerSource], {type: 'text/javascript'});
+        /*const workerBlob = new Blob([pdfWorkerSource], {type: 'text/javascript'});
         pdfjs.GlobalWorkerOptions.workerSrc = URL.createObjectURL(workerBlob);
+        */
+        
+        canvasSize.maxArea({
+            onError: function(width, height, benchmark) {
+               console.log('Error', width, height, benchmark);
+          },
+        onSuccess:this.setMaxCanvasSize
+          
+         });
     }
-
+    
+    setMaxCanvasSize(width, height, benchmark) {
+        this.state.maxCanvasSize = width * height;
+        Log.alert('Max canvas size:'+ this.state.maxCanvasSize);
+    }
+    
     componentDidUpdate(prevProps) {
         // Use window height changes to toggle the keyboard. To maintain keyboard state
         // on all platforms we also use focus/blur events. So we need to make sure here
@@ -204,7 +227,13 @@ class PDFView extends Component {
      */
     renderPage({index, style}) {
         const pageWidth = this.calculatePageWidth();
-
+        const pageHeight = this.calculatePageHeight(index);
+        
+        const nbPixels = pageWidth * pageHeight;
+        const ratio = (this.state.maxCanvasSize / nbPixels);
+        const devicePixelRatio = ratio > 3 ? 3 : ratio;
+        Log.alert('Page height: '+ pageHeight + ', page width: '+ pageWidth);
+        Log.alert('Ratio:'+ ratio);
         return (
             <View style={style}>
                 <Page
@@ -214,6 +243,7 @@ class PDFView extends Component {
                     // This needs to be empty to avoid multiple loading texts which show per page and look ugly
                     // See https://github.com/Expensify/App/issues/14358 for more details
                     loading=""
+                    devicePixelRatio={devicePixelRatio}
                 />
             </View>
         );
