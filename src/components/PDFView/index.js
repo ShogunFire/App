@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {View} from 'react-native';
 import 'core-js/features/array/at';
 import {Document, Page, pdfjs} from 'react-pdf/dist/esm/entry.webpack';
-
+import pdfWorkerSource from 'pdfjs-dist/legacy/build/pdf.worker';
 import {VariableSizeList as List} from 'react-window';
 import FullScreenLoadingIndicator from '../FullscreenLoadingIndicator';
 import styles from '../../styles/styles';
@@ -35,9 +35,6 @@ const LARGE_SCREEN_SIDE_SPACING = 40;
 class PDFView extends Component {
     constructor(props) {
         super(props);
-        pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
-        
         this.state = {
             numPages: null,
             pageViewports: [],
@@ -59,9 +56,8 @@ class PDFView extends Component {
         this.renderPage = this.renderPage.bind(this);
         this.setListAttributes = this.setListAttributes.bind(this);
 
-        /*const workerBlob = new Blob([pdfWorkerSource], {type: 'text/javascript'});
+        const workerBlob = new Blob([pdfWorkerSource], {type: 'text/javascript'});
         pdfjs.GlobalWorkerOptions.workerSrc = URL.createObjectURL(workerBlob);
-        */
         
         canvasSize.maxArea({
             onError: function(width, height, benchmark) {
