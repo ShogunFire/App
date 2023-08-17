@@ -10,7 +10,8 @@ import * as DeviceCapabilities from '../../libs/DeviceCapabilities';
 import usePrevious from '../../hooks/usePrevious';
 import useLocalize from '../../hooks/useLocalize';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-
+import withNavigation from '../withNavigation';
+import compose from '../../libs/compose';
 const hasHoverSupport = DeviceCapabilities.hasHoverSupport();
 
 /**
@@ -42,6 +43,10 @@ function Tooltip(props) {
     const animation = useRef(new Animated.Value(0));
     const isAnimationCanceled = useRef(false);
     const prevText = usePrevious(text);
+    
+    props.navigation.addListener('transitionStart', (event) => {
+        hideTooltip(true);
+    });
 
     /**
      * Display the tooltip in an animation.
@@ -100,14 +105,15 @@ function Tooltip(props) {
     /**
      * Hide the tooltip in an animation.
      */
-    const hideTooltip = () => {
+    const hideTooltip = (withAnimation) => {
         animation.current.stopAnimation();
 
-        if (TooltipSense.isActive() && !isTooltipSenseInitiator.current) {
+        if (TooltipSense.isActive() && !isTooltipSenseInitiator.current || !withAnimation) {
             animation.current.setValue(0);
         } else {
             // Hide the first tooltip which initiated the TooltipSense with animation
             isTooltipSenseInitiator.current = false;
+            
             Animated.timing(animation.current, {
                 toValue: 0,
                 duration: 140,
@@ -125,6 +131,8 @@ function Tooltip(props) {
     if ((_.isEmpty(text) && renderTooltipContent == null) || !hasHoverSupport) {
         return children;
     }
+    
+    
 
     return (
         <>
@@ -153,7 +161,7 @@ function Tooltip(props) {
             >
                 <Hoverable
                     onHoverIn={showTooltip}
-                    onHoverOut={hideTooltip}
+                    onHoverOut={() => hideTooltip(true)}
                 >
                     {children}
                 </Hoverable>
@@ -164,4 +172,4 @@ function Tooltip(props) {
 
 Tooltip.propTypes = tooltipPropTypes.propTypes;
 Tooltip.defaultProps = tooltipPropTypes.defaultProps;
-export default memo(Tooltip);
+export default compose(withNavigation) (Tooltip);
