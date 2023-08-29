@@ -73,22 +73,56 @@ const defaultProps = {
     errorRowStyles: [],
 };
 
-/**
- * This method applies the strikethrough to all the children passed recursively
- * @param {Array} children
- * @return {Array}
- */
-function applyStrikeThrough(children) {
-    return React.Children.map(children, (child) => {
-        if (!React.isValidElement(child)) {
-            return child;
+function applyStyleToComponent(component, needsOpacity, needsStrikeThrough){
+    var styleOffline = {};
+    if(needsStrikeThrough){
+        styleOffline = StyleUtils.combineStyles(styles.offlineFeedback.deleted, styles.userSelectNone);
+    }
+    if(needsOpacity){
+        styleOffline = StyleUtils.combineStyles(styleOffline, styles.offlineFeedback.pending);
+    }
+    return <View style={styleOffline}>{component}</View>;
+
+}
+ 
+function applyOfflineStyleRecursively(component, needsOpacity, needsStrikeThrough, depth = 0) {
+
+    // Not a valid element, no descendant
+    if (!React.isValidElement(component)) {
+        return [component, false];
+    }
+
+    // stopOfflineWithFeedBackStyle so we do nothing and return true
+    if(component.props.stopOfflineWithFeedBackStyle){
+        return [component, true];
+    }
+    
+    // We go through the descendants tree and store which children has a descendant with the prop 
+    var newChildren = null;
+    var foundChildWithProps = false;
+    if(component.props.children){
+        newChildren = React.Children.map(component.props.children, (child) => {
+            const [resultChild, hasDescendantWithStopOfflineStyle] = applyOfflineStyleRecursively(child, needsOpacity, needsStrikeThrough, depth + 1);
+            if(hasDescendantWithStopOfflineStyle){
+                foundChildWithProps = true;
+                return resultChild;
+            }
+            else{
+                return applyStyleToComponent(resultChild, needsOpacity, needsStrikeThrough);
+            }
+        });
+    }
+
+    if(!foundChildWithProps){
+        //An ancester will apply the style
+        if(depth != 0)
+            return [component, false];
+        else {
+            // We are at the root, we need to apply the style to the root
+            return [applyStyleToComponent(component, needsOpacity, needsStrikeThrough), false];
         }
-        const props = {style: StyleUtils.combineStyles(child.props.style, styles.offlineFeedback.deleted, styles.userSelectNone)};
-        if (child.props.children) {
-            props.children = applyStrikeThrough(child.props.children);
-        }
-        return React.cloneElement(child, props);
-    });
+    }
+    return [React.cloneElement(component, {children: newChildren}), true];
 }
 
 function OfflineWithFeedback(props) {
@@ -103,17 +137,18 @@ function OfflineWithFeedback(props) {
     const needsOpacity = !props.shouldDisableOpacity && ((isOfflinePendingAction && !isUpdateOrDeleteError) || isAddError);
     const needsStrikeThrough = props.network.isOffline && props.pendingAction === CONST.RED_BRICK_ROAD_PENDING_ACTION.DELETE;
     const hideChildren = props.shouldHideOnDelete && !props.network.isOffline && props.pendingAction === CONST.RED_BRICK_ROAD_PENDING_ACTION.DELETE && !hasErrors;
-    let children = props.children;
+    var children = props.children;
 
     // Apply strikethrough to children if needed, but skip it if we are not going to render them
-    if (needsStrikeThrough && !hideChildren) {
-        children = applyStrikeThrough(children);
+    if ((needsStrikeThrough || needsOpacity) && !hideChildren) {
+        children = React.Children.map(props.children, (child) => { return applyOfflineStyleRecursively(child, needsOpacity, needsStrikeThrough)[0]});
     }
+   
     return (
         <View style={props.style}>
             {!hideChildren && (
                 <View
-                    style={[needsOpacity ? styles.offlineFeedback.pending : {}, props.contentContainerStyle]}
+                    style={props.contentContainerStyle}
                     needsOffscreenAlphaCompositing={shouldRenderOffscreen ? needsOpacity && props.needsOffscreenAlphaCompositing : undefined}
                 >
                     {children}

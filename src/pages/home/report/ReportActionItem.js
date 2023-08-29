@@ -427,6 +427,7 @@ function ReportActionItem(props) {
                             isHovered={hovered}
                             icons={ReportUtils.getIconsForParticipants(oldestFourAccountIDs, props.personalDetailsList)}
                             onSecondaryInteraction={showPopover}
+                            stopOfflineWithFeedBackStyle
                         />
                     </View>
                 )}
@@ -537,7 +538,6 @@ function ReportActionItem(props) {
     const displayNamesWithTooltips = isWhisper ? ReportUtils.getDisplayNamesWithTooltips(whisperedToPersonalDetails, isMultipleParticipant) : [];
     return (
         <PressableWithSecondaryInteraction
-            pointerEvents={props.action.pendingAction === CONST.RED_BRICK_ROAD_PENDING_ACTION.DELETE ? 'none' : 'auto'}
             ref={popoverAnchorRef}
             onPressIn={() => props.isSmallScreenWidth && DeviceCapabilities.canUseTouchScreen() && ControlSelection.block()}
             onPressOut={() => ControlSelection.unblock()}
