@@ -176,16 +176,27 @@ function ComposerWithSuggestions({
      */
     const updateComment = useCallback(
         (commentValue, shouldDebounceSaveComment) => {
-            const {text: newComment, emojis} = EmojiUtils.replaceAndExtractEmojis(commentValue, preferredSkinTone, preferredLocale);
-
+            var {text: newComment, emojis} = EmojiUtils.replaceAndExtractEmojis(commentValue, preferredSkinTone, preferredLocale);
+            var shouldChangeSelectionIfCommentChanged = true;
             if (!_.isEmpty(emojis)) {
+                const lastEmoji = emojis[emojis.length-1];
+                if(newComment.endsWith(lastEmoji.code) && commentValue.length - lastEmoji.code.length <= textInputRef.current.selectionStart && newComment.length > commentRef.current.length)
+                {
+                    newComment+=' ';
+                    setSelection({
+                        start: newComment.length,
+                        end: newComment.length,
+                    });
+                    shouldChangeSelectionIfCommentChanged = false;
+                }
+                
                 insertedEmojisRef.current = [...insertedEmojisRef.current, ...emojis];
                 debouncedUpdateFrequentlyUsedEmojis();
             }
 
             setIsCommentEmpty(!!newComment.match(/^(\s)*$/));
             setValue(newComment);
-            if (commentValue !== newComment) {
+            if (commentValue !== newComment && shouldChangeSelectionIfCommentChanged) {
                 const remainder = ComposerUtils.getCommonSuffixLength(commentRef.current, newComment);
                 setSelection({
                     start: newComment.length - remainder,
