@@ -63,7 +63,7 @@ function MentionUserRenderer(props) {
                     displayName: displayNameOrLogin,
                 }}
             >
-                <TextLink
+                <Text
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...defaultRendererProps}
                     href={`/${navigationRoute}`}
